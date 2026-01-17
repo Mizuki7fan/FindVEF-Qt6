@@ -1,0 +1,1 @@
+git bundle create F:\OneDrive\GitRepo\FindVEF-Qt6.bundle --all
