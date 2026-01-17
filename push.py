@@ -1,28 +1,37 @@
 import subprocess
 import sys
 
-def run_command(command):
+def run_command(command, capture_output=True):
     """
     执行 Shell 命令并返回输出。
     如果命令执行失败（返回码非0），则打印错误信息并退出脚本。
     """
     try:
-        # 使用 shell=True 允许执行完整的命令字符串
-        # encoding='utf-8' 适配大多数 Git 输出，errors='replace' 防止编码错误导致崩溃
-        result = subprocess.run(
-            command, 
-            shell=True, 
-            check=True, 
-            stdout=subprocess.PIPE, 
-            stderr=subprocess.PIPE, 
-            text=True,
-            encoding='utf-8',
-            errors='replace'
-        )
-        return result.stdout.strip()
+        if capture_output:
+            # 使用 shell=True 允许执行完整的命令字符串
+            # encoding='utf-8' 适配大多数 Git 输出，errors='replace' 防止编码错误导致崩溃
+            result = subprocess.run(
+                command, 
+                shell=True, 
+                check=True, 
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE, 
+                text=True,
+                encoding='utf-8',
+                errors='replace'
+            )
+            return result.stdout.strip()
+        else:
+            subprocess.run(
+                command, 
+                shell=True, 
+                check=True
+            )
+            return ""
     except subprocess.CalledProcessError as e:
         print(f"执行命令失败: {command}")
-        print(f"错误信息: {e.stderr}")
+        if capture_output:
+            print(f"错误信息: {e.stderr}")
         sys.exit(1)
 
 def check_git_status():
@@ -87,7 +96,7 @@ def main():
             # 使用 --all 备份所有分支和标签
             cmd = f'git bundle create "{url}" --all'
             print(f"   [执行命令]: {cmd}")
-            run_command(cmd)
+            run_command(cmd, capture_output=False)
             print("   [结果]: Bundle 创建/更新成功。")
             
         # 判断是否为 git 仓库 (以 .git 结尾，忽略大小写)
@@ -97,7 +106,7 @@ def main():
             # 建议加上 --all 以确保推送到所有分支（与 bundle --all 行为一致）
             cmd = f'git push {name} --all --force'
             print(f"   [执行命令]: {cmd}")
-            run_command(cmd)
+            run_command(cmd, capture_output=False)
             print("   [结果]: Git Push 推送成功。")
             
         else:
