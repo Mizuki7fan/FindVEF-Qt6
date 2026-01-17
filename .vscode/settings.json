@@ -1,0 +1,19 @@
+{
+    "clang-format.executable": "D:\\LLVM\\bin\\clang-format.exe",
+    "clangd.path": "D:\\LLVM\\bin\\clangd.exe",
+    "clangd.arguments": [
+        "--header-insertion=never",
+    ],    
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "cmake.outputLogEncoding": "utf-8",
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "${buildType}"
+        },
+    "cmake.generator": "Ninja",
+    "files.associations": {
+        "fstream": "cpp"
+    },
+    "workbench.colorTheme": "Visual Studio 2022 Blue",
+    "files.exclude": {
+        "build": true}
+}
